@@ -2,18 +2,23 @@
 #include "cocostudio/CocoStudio.h"
 #include "ui/CocosGUI.h"
 #include "Definitions.h"
+#include "GameScene.h"
 
 USING_NS_CC;
 
 ActiveSprite::ActiveSprite() {}
 
-ActiveSprite::~ActiveSprite() {}
+ActiveSprite::~ActiveSprite() 
+{
 
-ActiveSprite* ActiveSprite::create()
+	cocos2d::Director::getInstance()->getEventDispatcher()->removeEventListener(m_pListener);
+}
+
+ActiveSprite* ActiveSprite::create(std::string name)
 {
 	ActiveSprite* pSprite = new ActiveSprite();
 
-	if (pSprite->initWithFile("phone.png"))
+	if (pSprite->initWithFile(name))
 	{
 		pSprite->autorelease();
 
@@ -35,13 +40,11 @@ void ActiveSprite::_initOptions()
 
 void ActiveSprite::_addEvents()
 {
-	auto listener = EventListenerTouchOneByOne::create();
-	listener->setSwallowTouches(true);
+	m_pListener = EventListenerTouchOneByOne::create();
+	m_pListener->setSwallowTouches(true);
 
-	listener->onTouchBegan = [&](cocos2d::Touch* touch, cocos2d::Event* event)
+	m_pListener->onTouchBegan = [&](cocos2d::Touch* touch, cocos2d::Event* event)
 	{
-		if (this != nullptr)
-		{
 			Vec2 position = touch->getLocation();
 			Rect rect = this->getBoundingBox();
 
@@ -49,16 +52,15 @@ void ActiveSprite::_addEvents()
 			{
 				return true;
 			}
-		}
 		return false;
 	};
 
-	listener->onTouchEnded = [=](cocos2d::Touch* touch, cocos2d::Event* event)
+	m_pListener->onTouchEnded = [=](cocos2d::Touch* touch, cocos2d::Event* event)
 	{
 		_touchEvent(touch);
 	};
 
-	cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 30);
+	cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(m_pListener, 30);
 }
 
 void ActiveSprite::_touchEvent(cocos2d::Touch* touch)
@@ -66,7 +68,7 @@ void ActiveSprite::_touchEvent(cocos2d::Touch* touch)
 	
 	this->removeAllChildrenWithCleanup(true);
 	this->removeFromParentAndCleanup(true);
-	CCLOG("touched MySprite");
-	//this->cleanup();
-	//this = nullptr;
+	cocos2d::Director::getInstance()->getEventDispatcher()->removeEventListener(m_pListener);
+	EventCustom event("addPoint");
+	Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
