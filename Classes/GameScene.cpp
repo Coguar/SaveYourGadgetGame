@@ -5,7 +5,7 @@
 #include "GameOverScene.h"
 #include "ActiveSprite.h"
 #include "SimpleAudioEngine.h"
-
+#include "Constants.h"
 
 USING_NS_CC;
 
@@ -39,7 +39,7 @@ bool GameScene::init()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	auto backgrowndSprite = Sprite::create("GameScene.png");
+	auto backgrowndSprite = Sprite::create(MENU_SCRENE);
 	backgrowndSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
 	this->addChild(backgrowndSprite);
@@ -54,6 +54,7 @@ bool GameScene::init()
 
 	this->schedule(schedule_selector(GameScene::SpawnItem), SPAWN_FREQUENCY);
 
+	water.create();
 	water.AddWater(this);
 
 	auto contactListener = EventListenerPhysicsContact::create();
@@ -61,21 +62,22 @@ bool GameScene::init()
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
 	scorePoint = 0;
-	auto pointListener = EventListenerCustom::create("addPoint", [=](EventCustom *event)
+
+	auto pointListener = EventListenerCustom::create(ADD_POINT, [=](EventCustom *event)
 	{
 		scorePoint++;
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("sound/Point.mp3");
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(POINT_SOUND.c_str());
 
-		if (scorePoint == 100)
+		if (scorePoint == LAPTOP_SPAWN_SCORE)
 		{
 			this->schedule(schedule_selector(GameScene::SpawnItemFromSide), SPAWN_FREQUENCY * 2);
 		}
 
-		if (scorePoint % 10 == 0)
+		if (scorePoint % FREQUENCY_RAISING == 0)
 		{
-			if (scorePoint / 1000 < 0.3)
+			if (SPAWN_FREQUENCY - scorePoint * LEVEL_KOEFITSENT > MAX_SPAWN_FREQUENCY)
 			{
-				this->schedule(schedule_selector(GameScene::SpawnItem), SPAWN_FREQUENCY - scorePoint / 1000);
+				this->schedule(schedule_selector(GameScene::SpawnItem), SPAWN_FREQUENCY - scorePoint * LEVEL_KOEFITSENT);
 			}
 			else
 			{
@@ -83,13 +85,11 @@ bool GameScene::init()
 
 			}
 		}
-		__String * templeScore = __String::createWithFormat("%i", scorePoint);
-		scoreLabel->setString(templeScore->getCString());
+		scoreLabel->setString(std::to_string(scorePoint));
 	});
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(pointListener, this);
 
-	__String * templeScore = __String::createWithFormat("%i", scorePoint);
-	scoreLabel = Label::createWithTTF(templeScore->getCString(), "score.ttf", visibleSize.height * FONT_SIZE);
+	scoreLabel = Label::createWithTTF(std::to_string(scorePoint), MAIN_FONT, visibleSize.height * FONT_SIZE);
 	scoreLabel->setColor(Color3B::WHITE);
 	scoreLabel->setPosition(visibleSize.width / 2 + origin.x, origin.y + visibleSize.height * FONT_SIZE);
 	this->addChild(scoreLabel, 10000);
@@ -97,18 +97,31 @@ bool GameScene::init()
 
 	return true;
 }
-   
+  
 
 void GameScene::SpawnItem(float dt)
 {
-	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("sound/drop.mp3");
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(DROP_SOUND.c_str());
 	item.SpawnItem(this);
 }
 
 void GameScene::SpawnItemFromSide(float dt)
 {
-	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("sound/drop.mp3");
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(DROP_SOUND.c_str());
 	item.SpawnItemFromSide(this);
+}
+
+void GameScene::CheckGameCollision(cocos2d::PhysicsBody & first, cocos2d::PhysicsBody & second)
+{
+	if (((first.getCollisionBitmask() == WATER_COLLISION_BITMASK) && (second.
+		getCollisionBitmask() == ITEM_COLLISION_BITMASK)) || ((second.
+			getCollisionBitmask() == WATER_COLLISION_BITMASK) && (first.
+				getCollisionBitmask() == ITEM_COLLISION_BITMASK)))
+	{
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(LOSE_SOUND.c_str());
+		auto scene = GameOverScene::createScene(scorePoint);
+		Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));
+	}
 }
 
 bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact)
@@ -116,17 +129,6 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact)
 
 	PhysicsBody *first = contact.getShapeA()->getBody();
 	PhysicsBody *second = contact.getShapeB()->getBody();
-
-	if (((first->getCollisionBitmask() == WATER_COLLISION_BITMASK) && (second->
-		getCollisionBitmask() == ITEM_COLLISION_BITMASK)) || ((second->
-			getCollisionBitmask() == WATER_COLLISION_BITMASK) && (first->
-				getCollisionBitmask() == ITEM_COLLISION_BITMASK)))
-	{
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("sound/lose.mp3");
-		this->removeAllChildrenWithCleanup(true);
-		auto scene = GameOverScene::createScene(scorePoint);
-		Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));
-
-	}
+	CheckGameCollision(*first, *second);
 	return true;
 }

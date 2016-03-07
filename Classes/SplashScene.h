@@ -1,4 +1,3 @@
-#ifndef __SPLASH_SCENE_H__
 #pragma once
 #include "cocos2d.h"
 
@@ -18,4 +17,3 @@ private:
 	void GoToMenuScene(float dt);
 };
 
-#endif // __SPLASH_SCENE_H__

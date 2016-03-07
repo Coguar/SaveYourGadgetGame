@@ -1,4 +1,3 @@
-#ifndef _MYSPRITE_H_
 #pragma once
 
 #include "cocos2d.h"
@@ -11,9 +10,9 @@ private:
 	cocos2d::EventListenerTouchOneByOne *m_pListener = nullptr;
 protected:
 
-	void _initOptions();
+	void initOptions();
 
-	void _addEvents();
+	void addEvents();
 
 	ActiveSprite();
 
@@ -22,7 +21,8 @@ public:
 
 	void _touchEvent(cocos2d::Touch* touch);
 
+	virtual void cleanup() override;
+
 	static ActiveSprite* create(std::string name);
 };
 
-#endif // _MYSPRITE_H_

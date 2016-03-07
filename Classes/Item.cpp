@@ -3,6 +3,7 @@
 #include "ui/CocosGUI.h"
 #include "Definitions.h"
 #include "ActiveSprite.h"
+#include "Constants.h"
 
 USING_NS_CC;
 
@@ -17,7 +18,7 @@ Item::Item()
 void Item::SpawnItem(cocos2d::Layer *layer)
 {
 
-	auto phoneItem = ActiveSprite::create("phone.png");
+	auto phoneItem = ActiveSprite::create(PHONE_ITEM);
 
 	auto phonePhysicsBoby = PhysicsBody::createBox(phoneItem->getContentSize());
 
@@ -50,7 +51,7 @@ void Item::SpawnItem(cocos2d::Layer *layer)
 void Item::SpawnItemFromSide(cocos2d::Layer *layer)
 {
 
-	auto phoneItem = ActiveSprite::create("iPad.png");
+	auto phoneItem = ActiveSprite::create(LAPTOP_ITEM);
 
 	auto phonePhysicsBoby = PhysicsBody::createBox(phoneItem->getContentSize());
 

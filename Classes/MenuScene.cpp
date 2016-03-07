@@ -4,6 +4,7 @@
 #include "GameScene.h"
 #include "Definitions.h"
 #include "SimpleAudioEngine.h"
+#include "Constants.h"
 
 
 USING_NS_CC;
@@ -37,12 +38,12 @@ bool MenuScene::init()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	auto backgrowndSprite = Sprite::create("GameScene.png");
+	auto backgrowndSprite = Sprite::create(MENU_SCRENE);
 	backgrowndSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
 	this->addChild(backgrowndSprite);
 
-	auto playItem = MenuItemImage::create("play.png", "play_Clicked.png", CC_CALLBACK_1(MenuScene::GoToGameScene, this));
+	auto playItem = MenuItemImage::create(PLAY_BUTTON, PLAY_BUTTON_CLICKED, CC_CALLBACK_1(MenuScene::GoToGameScene, this));
 	playItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
 	auto menu = Menu::create(playItem, NULL);
@@ -50,7 +51,7 @@ bool MenuScene::init()
 
 	this->addChild(menu);
 
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("sound/BG_sound.mp3", true);
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(BG_SOUND.c_str(), true);
 
 	return true;
 }

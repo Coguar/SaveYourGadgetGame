@@ -1,4 +1,3 @@
-#ifndef __GAME_SCENE_H__
 #pragma once
 #include "cocos2d.h"
 #include "Item.h"
@@ -25,6 +24,8 @@ private:
 
 	void SpawnItemFromSide(float dt);
 
+	void CheckGameCollision(cocos2d::PhysicsBody & first, cocos2d::PhysicsBody & second);
+
 	bool onContactBegin(cocos2d::PhysicsContact &contact);
 
 	cocos2d::PhysicsWorld *sceneWorld;
@@ -37,4 +38,3 @@ private:
 
 };
 
-#endif // __GAME_SCENE_H__

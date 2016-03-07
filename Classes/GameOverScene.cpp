@@ -67,14 +67,12 @@ bool GameOverScene::init()
 
 	def->flush();
 
-	__String * templeScore = __String::createWithFormat("Score: %i", score);
-	scoreLabel = Label::createWithTTF(templeScore->getCString(), "score.ttf", visibleSize.height * FONT_SIZE);
+	scoreLabel = Label::createWithTTF("Score: " + std::to_string(score), "score.ttf", visibleSize.height * FONT_SIZE);
 	scoreLabel->setColor(Color3B::WHITE);
 	scoreLabel->setPosition(visibleSize.width / 2 + origin.x, origin.y + visibleSize.height / 2);
 	this->addChild(scoreLabel);
 
-	__String * templeHScore = __String::createWithFormat("High Score: %i", highScore);
-	hScoreLabel = Label::createWithTTF(templeHScore->getCString(), "score.ttf", visibleSize.height * FONT_SIZE / 2);
+	hScoreLabel = Label::createWithTTF("High Score: " + std::to_string(highScore), "score.ttf", visibleSize.height * FONT_SIZE / 2);
 	hScoreLabel->setColor(Color3B::YELLOW);
 	hScoreLabel->setPosition(visibleSize.width / 2 + origin.x, origin.y + visibleSize.height / 2 + visibleSize.height * FONT_SIZE);
 	this->addChild(hScoreLabel);

@@ -1,4 +1,3 @@
-#ifndef __ITEM_H__
 #pragma once
 #include "cocos2d.h"
 
@@ -18,4 +17,3 @@ private:
 	cocos2d::Vec2 origin;
 };
 
-#endif // __ITEM_H__

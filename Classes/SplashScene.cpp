@@ -4,6 +4,7 @@
 #include "MenuScene.h"
 #include "Definitions.h"
 #include "SimpleAudioEngine.h"
+#include "Constants.h"
 
 USING_NS_CC;
 
@@ -33,16 +34,16 @@ bool SplashScene::init()
 		return false;
 	}
 
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("sound/Point.mp3");
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("sound/lose.mp3");
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("sound/drop.mp3");
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("sound/BG_sound.mp3");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(POINT_SOUND.c_str());
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(LOSE_SOUND.c_str());
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(DROP_SOUND.c_str());
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic(BG_SOUND.c_str());
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	this->scheduleOnce( schedule_selector(SplashScene::GoToMenuScene), DISPLAY_TIME_SPLASH_SCENE );
 
-	auto backgrowndSprite = Sprite::create("SplashScene.png");
+	auto backgrowndSprite = Sprite::create(SPLASH_SCRENE);
 	backgrowndSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
 	this->addChild(backgrowndSprite);

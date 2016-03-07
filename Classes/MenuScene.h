@@ -1,4 +1,3 @@
-#ifndef __MENU_SCENE_H__
 #pragma once
 #include "cocos2d.h"
 
@@ -17,4 +16,3 @@ private:
 	void GoToGameScene(cocos2d::Ref *sender);
 };
 
-#endif // __MENU_SCENE_H__

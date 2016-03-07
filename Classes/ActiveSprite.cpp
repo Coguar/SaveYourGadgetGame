@@ -3,16 +3,13 @@
 #include "ui/CocosGUI.h"
 #include "Definitions.h"
 #include "GameScene.h"
+#include "Constants.h"
 
 USING_NS_CC;
 
-ActiveSprite::ActiveSprite() {}
+ActiveSprite::ActiveSprite() = default;
 
-ActiveSprite::~ActiveSprite() 
-{
-
-	cocos2d::Director::getInstance()->getEventDispatcher()->removeEventListener(m_pListener);
-}
+ActiveSprite::~ActiveSprite() {}
 
 ActiveSprite* ActiveSprite::create(std::string name)
 {
@@ -22,9 +19,9 @@ ActiveSprite* ActiveSprite::create(std::string name)
 	{
 		pSprite->autorelease();
 
-		pSprite->_initOptions();
+		pSprite->initOptions();
 
-		pSprite->_addEvents();
+		pSprite->addEvents();
 
 		return pSprite;
 	}
@@ -33,12 +30,12 @@ ActiveSprite* ActiveSprite::create(std::string name)
 	return nullptr;
 }
 
-void ActiveSprite::_initOptions()
+void ActiveSprite::initOptions()
 {
   
 }
 
-void ActiveSprite::_addEvents()
+void ActiveSprite::addEvents()
 {
 	m_pListener = EventListenerTouchOneByOne::create();
 	m_pListener->setSwallowTouches(true);
@@ -60,15 +57,21 @@ void ActiveSprite::_addEvents()
 		_touchEvent(touch);
 	};
 
-	cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(m_pListener, 30);
+	cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(m_pListener, TOCH_ON_SPRITE_PRIORITY);
 }
 
 void ActiveSprite::_touchEvent(cocos2d::Touch* touch)
 {
-	
+	this->cleanup();
 	this->removeAllChildrenWithCleanup(true);
 	this->removeFromParentAndCleanup(true);
-	cocos2d::Director::getInstance()->getEventDispatcher()->removeEventListener(m_pListener);
-	EventCustom event("addPoint");
+
+	EventCustom event(ADD_POINT);
 	Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+	
+}
+
+void ActiveSprite::cleanup()
+{
+	cocos2d::Director::getInstance()->getEventDispatcher()->removeEventListener(m_pListener);
 }
