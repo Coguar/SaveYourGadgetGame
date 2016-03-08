@@ -10,8 +10,8 @@ USING_NS_CC;
 
 Item::Item()
 {
-	visibleSize = Director::getInstance()->getVisibleSize();
-	origin = Director::getInstance()->getVisibleOrigin();
+	m_visibleSize = Director::getInstance()->getVisibleSize();
+	m_origin = Director::getInstance()->getVisibleOrigin();
 }
 
 
@@ -36,13 +36,13 @@ void Item::SpawnItem(cocos2d::Layer *layer)
 		random = RIGHT_SCREEN_SPAWN_THRESHOLD;
 	}
 
-	auto itemPosition = random * visibleSize.width;
+	auto itemPosition = random * m_visibleSize.width;
 
 	phonePhysicsBoby->setDynamic(true);
 
 	phoneItem->setPhysicsBody(phonePhysicsBoby);
 
-	phoneItem->setPosition(itemPosition + origin.x, visibleSize.height - 5);
+	phoneItem->setPosition(itemPosition + m_origin.x, m_visibleSize.height - 5);
 
 	layer->addChild(phoneItem);
 
@@ -63,23 +63,23 @@ void Item::SpawnItemFromSide(cocos2d::Layer *layer)
 	if (random < 0.5)
 	{
 		random = MAX_LEFT_SCREEN_SPAWN;
-		itemAction = cocos2d::MoveBy::create(MOVEMENT_SPEED * visibleSize.width, Point(visibleSize.width * 1.5, 0));
+		itemAction = cocos2d::MoveBy::create(MOVEMENT_SPEED * m_visibleSize.width, Point(m_visibleSize.width * 1.5, 0));
 
 	}
 	else if (random >= 0.5)
 	{
 		random = MAX_RIGHT_SCREEN_SPAWN;
-		itemAction = cocos2d::MoveBy::create(MOVEMENT_SPEED * visibleSize.width, Point(-visibleSize.width * 1.5, 0));
+		itemAction = cocos2d::MoveBy::create(MOVEMENT_SPEED * m_visibleSize.width, Point(-m_visibleSize.width * 1.5, 0));
 
 	}
 
-	auto itemPosition = random * visibleSize.width;
+	auto itemPosition = random * m_visibleSize.width;
 
 	phonePhysicsBoby->setDynamic(true);
 
 	phoneItem->setPhysicsBody(phonePhysicsBoby);
 
-	phoneItem->setPosition(itemPosition + origin.x, visibleSize.height * Y_POS_TO_SPAWN + origin.y);
+	phoneItem->setPosition(itemPosition + m_origin.x, m_visibleSize.height * Y_POS_TO_SPAWN + m_origin.y);
 
 	phoneItem->runAction(itemAction);
 	layer->addChild(phoneItem);

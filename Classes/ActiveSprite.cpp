@@ -62,7 +62,6 @@ void ActiveSprite::addEvents()
 
 void ActiveSprite::_touchEvent(cocos2d::Touch* touch)
 {
-	this->cleanup();
 	this->removeAllChildrenWithCleanup(true);
 	this->removeFromParentAndCleanup(true);
 

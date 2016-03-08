@@ -10,28 +10,28 @@ class  AppDelegate : private cocos2d::Application
 {
 public:
     AppDelegate();
-    virtual ~AppDelegate();
+    virtual ~AppDelegate() override;
 
-    virtual void initGLContextAttrs();
+    virtual void initGLContextAttrs() override;
 
     /**
     @brief    Implement Director and Scene init code here.
     @return true    Initialize success, app continue.
     @return false   Initialize failed, app terminate.
     */
-    virtual bool applicationDidFinishLaunching();
+    virtual bool applicationDidFinishLaunching() override;
 
     /**
     @brief  The function be called when the application enter background
     @param  the pointer of the application
     */
-    virtual void applicationDidEnterBackground();
+    virtual void applicationDidEnterBackground() override;
 
     /**
     @brief  The function be called when the application enter foreground
     @param  the pointer of the application
     */
-    virtual void applicationWillEnterForeground();
+    virtual void applicationWillEnterForeground() override;
 };
 
 
